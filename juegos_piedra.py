@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import PhotoImage
 from random import choice
 
+
 class PiedraPapelTijeraApp:
     def __init__(self, root): #Definimos el metodo
         #Identificador ventanas
