@@ -1,7 +1,14 @@
 import tkinter as tk
 from tkinter import PhotoImage
 from random import choice
+import os
+import sys
 
+def ruta_absoluta(ruta_relativa):
+    #Obtiene la ruta absoluta, compatible con PyInstaller.
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, ruta_relativa)
+    return os.path.join(os.path.abspath("."), ruta_relativa)
 
 class PiedraPapelTijeraApp:
     def __init__(self, root): #Definimos el metodo
@@ -35,9 +42,10 @@ class PiedraPapelTijeraApp:
         self.seleccion_computadora_label.pack(pady=10)
 
         # Cargar imágenes
-        self.piedra_img = PhotoImage(file="piedra.png")
-        self.papel_img = PhotoImage(file="papel.png")
-        self.tijera_img = PhotoImage(file="tijera.png")
+        self.piedra_img = PhotoImage(file=ruta_absoluta("piedra.png"))
+        self.papel_img = PhotoImage(file=ruta_absoluta("papel.png"))
+        self.tijera_img = PhotoImage(file=ruta_absoluta("tijera.png"))
+
 
         # Botones de opciones
         self.botones_frame = tk.Frame(root)
@@ -53,9 +61,6 @@ class PiedraPapelTijeraApp:
         self.tijera_btn = tk.Button(self.botones_frame, image=self.tijera_img, command=lambda: self.jugar("Tijera"))
         self.tijera_btn.grid(row=0, column=2, padx=10)
 
-        #Boton para reiniciar
-        self.reiniciar_btn = tk.Button(root, text="Reiniciar", font=("Arial",12), bg=("beige"),command=self.reiniciar)
-        self.reiniciar_btn.pack(pady=10)
         
     #Función para desarrollar juego 
     def jugar(self, jugador_seleccion):
@@ -78,19 +83,13 @@ class PiedraPapelTijeraApp:
         else:
             resultado = "Perdiste"
             self.computadora_puntos += 1
-    def reiniciar(self):
-        self.jugador_puntos = 0
-        self.computadora_puntos = 0
-        self.jugador_label.config(text="Jugador: 0")
-        self.computadora_label.config(text="Computadora: 0")
-        self.resultado_label.config(text="Elige una opción")
-        self.seleccion_computadora_label.config(text="Computadora eligió: -")
-
-        # Actualizar el resultado y puntuaciones
+    
+      # Actualizar el resultado y puntuaciones
         self.resultado_label.config(text=f"{resultado}")
         self.jugador_label.config(text=f"Jugador: {self.jugador_puntos}")
         self.computadora_label.config(text=f"Computadora: {self.computadora_puntos}")
 
+#Llamar a las funciones para que se ejecuten
 if __name__ == "__main__":
     root = tk.Tk()
     app = PiedraPapelTijeraApp(root)
